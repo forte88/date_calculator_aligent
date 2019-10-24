@@ -1,0 +1,14 @@
+# System Files
+.DS_Store
+Thumbs.db
+
+#ide
+.idea/
+
+# Slim .gitignore
+vendor/
+.env
+/logs/*
+!/logs/README.md
+public/tests
+
