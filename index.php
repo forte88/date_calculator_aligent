@@ -14,7 +14,7 @@ $app->get('/hello/{name}', function (Request $request,Response $response, array 
     return $response->write("Hello " . $args['name']);
 });
 
-$app->post('/date', function (Request$request, Response $response){
+$app->post('/days', function (Request$request, Response $response){
     $data = $request->getParams();
     $date_data = [];
     $date_data['start'] = filter_var($data['start'], FILTER_SANITIZE_STRING);
@@ -25,6 +25,17 @@ $app->post('/date', function (Request$request, Response $response){
         return $_date && $_date->format($format) == $date;
     }
 
+    function daysBetweenDates($start, $end){
+        $start = new DateTime("$start");
+        $end = new DateTime("$end");
+        $interval = $start->diff($end);
+        return $interval->format('%a');
+    }
+
+    $days = daysBetweenDates($date_data['start'],$date_data['end'] );
+    $payload = [
+        'Days' => $days,
+    ];
 
 
     if (validateDate($date_data['start']) == false){
@@ -32,7 +43,7 @@ $app->post('/date', function (Request$request, Response $response){
     }else if(validateDate($date_data['end']) ==false){
         return $response->withStatus(400)->write("please use correct date format for date1");
     }else{
-        return $response->withStatus(200)->withJson($date_data);
+        return $response->withStatus(200)->withJson($payload);
     }
 
 
