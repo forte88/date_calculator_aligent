@@ -15,29 +15,6 @@ class DateCalcController
 
     }
 
-
-    public function calcDays(Request $request, Response $response){
-        $data = $request->getParsedBody();
-        $days = $this->intervalBetweenDates($data['start'],$data['end']);
-        $payload = [
-            'Days' => $days->days,
-        ];
-
-
-        return $response->withStatus(200)->withJson($payload);
-    }
-
-    public function calcWeeks(Request $request, Response $response){
-        $data = $request->getParsedBody();
-        $days = $this->intervalBetweenDates($data['start'],$data['end']);
-        $payload = [
-            'Weeks' => $days->days/7,
-        ];
-
-
-        return $response->withStatus(200)->withJson($payload);
-    }
-
     private function weekDayCalc($starttime, $endtime){
         $days = [];
         $dayCount = 0;
@@ -88,23 +65,67 @@ class DateCalcController
         return $args;
     }
 
+
+    public function calcDays(Request $request, Response $response){
+        $data = $request->getParsedBody();
+        $days = $this->intervalBetweenDates($data['start'],$data['end']);
+        if ($data['formatted'] == 1){
+            $days->format('%y,%d,%h,%i,%s,%a');
+            $payload = [
+                'Years' => $days->format('%y'),
+                'Days' => $days->format('%d'),
+                'Hours' => $days->format('%h'),
+                'Minutes' => $days->format('%i'),
+                'Seconds' => $days->format('%s'),
+            ];
+        }else{
+            $payload = [
+                'Days' => $days->days,
+            ];
+        }
+
+
+
+        return $response->withStatus(200)->withJson($payload);
+    }
+
+    public function calcWeeks(Request $request, Response $response){
+        $data = $request->getParsedBody();
+        $days = $this->intervalBetweenDates($data['start'],$data['end']);
+        if ($data['formatted'] == 1){
+            $days->format('%y,%d,%h,%i,%s,%a');
+            $payload = [
+                'Years' => $days->format('%y'),
+                'Days' => $days->format('%d'),
+                'Hours' => $days->format('%h'),
+                'Minutes' => $days->format('%i'),
+                'Seconds' => $days->format('%s'),
+            ];
+        }else
+        $payload = [
+            'Weeks' => $days->days/7,
+        ];
+
+
+        return $response->withStatus(200)->withJson($payload);
+    }
+
     public function calcWeekDay(Request $request, Response $response){
         $data = $request->getParsedBody();
 
-        $weekDay = $this->weekDayCalc($data['start'],$data['end'] );
-        $weekInDays =  $this->convertDayToSec($weekDay);
+        $weekDay = $this->weekDayCalc($data['start'],$data['end']);
 
 
-        return $response->withStatus(200)->withJson($weekInDays);
+        if($data['formatted'] == 1){
+            $payload =  $this->convertDayToSec($weekDay);
+        }else{
+            $payload = [
+                'Days' => floor($weekDay/(24 * 3600)),
+            ];
+        }
+
+
+        return $response->withStatus(200)->withJson($payload);
     }
 
 }
-
-
-
-
-
-
-
-
-//$interval->format('%a');
