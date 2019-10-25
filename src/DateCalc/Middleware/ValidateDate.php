@@ -7,7 +7,7 @@ use DateTime;
 
 class ValidateDate
 {
-    function validateDate($date, $format = 'Y-m-d H:i:s'){
+    private function validateDate($date, $format = 'Y-m-d H:i:s'){
         $_date = DateTime::createFromFormat($format, $date);
         return $_date && $_date->format($format) == $date;
     }
