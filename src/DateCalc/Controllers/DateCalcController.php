@@ -15,6 +15,18 @@ class DateCalcController
 
     }
 
+    private function formatPayload($days){
+        $payload = [
+            'Years' => $days->format('%y'),
+            'Days' => $days->format('%d'),
+            'Hours' => $days->format('%h'),
+            'Minutes' => $days->format('%i'),
+            'Seconds' => $days->format('%s'),
+        ];
+
+        return $payload;
+    }
+
     private function weekDayCalc($starttime, $endtime){
         $days = [];
         $dayCount = 0;
@@ -70,14 +82,7 @@ class DateCalcController
         $data = $request->getParsedBody();
         $days = $this->intervalBetweenDates($data['start'],$data['end']);
         if ($data['formatted'] == 1){
-            $days->format('%y,%d,%h,%i,%s,%a');
-            $payload = [
-                'Years' => $days->format('%y'),
-                'Days' => $days->format('%d'),
-                'Hours' => $days->format('%h'),
-                'Minutes' => $days->format('%i'),
-                'Seconds' => $days->format('%s'),
-            ];
+            $payload = $this->formatPayload($days);
         }else{
             $payload = [
                 'Days' => $days->days,
@@ -93,14 +98,7 @@ class DateCalcController
         $data = $request->getParsedBody();
         $days = $this->intervalBetweenDates($data['start'],$data['end']);
         if ($data['formatted'] == 1){
-            $days->format('%y,%d,%h,%i,%s,%a');
-            $payload = [
-                'Years' => $days->format('%y'),
-                'Days' => $days->format('%d'),
-                'Hours' => $days->format('%h'),
-                'Minutes' => $days->format('%i'),
-                'Seconds' => $days->format('%s'),
-            ];
+            $payload = $this->formatPayload($days);
         }else
         $payload = [
             'Weeks' => $days->days/7,
