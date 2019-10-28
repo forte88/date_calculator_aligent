@@ -7,8 +7,18 @@ use Exception;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
+/**
+ * Class DateCalcController
+ * @package DateCalc\Controllers
+ */
 class DateCalcController
 {
+    /**Creates date objects and  returns interval between two date times
+     * @param $start
+     * @param $end
+     * @return bool|\DateInterval
+     * @throws Exception
+     */
     private function intervalBetweenDates($start, $end){
         $start = new DateTime("$start");
         $end = new DateTime("$end");
@@ -16,6 +26,10 @@ class DateCalcController
         return $interval;
     }
 
+    /**Formats date time object into an array of years days etc
+     * @param $days
+     * @return array
+     */
     private function formatPayload($days){
         $payload = [
             'Years' => $days->format('%y'),
@@ -28,6 +42,12 @@ class DateCalcController
         return $payload;
     }
 
+    /**Calculates the weekdays between two datetime objects in unix time
+     * @param $starttime
+     * @param $endtime
+     * @return false|float|int
+     * @throws Exception
+     */
     private function weekDayCalc($starttime, $endtime){
         $days = [];
         $dayCount = 0;
@@ -52,6 +72,10 @@ class DateCalcController
         return $weekDay;
     }
 
+    /**Converts unix time into years, days, hours etc
+     * @param $weekDay
+     * @return array
+     */
     private function convertDayToSec($weekDay){
         $year = 0;
         $day = $weekDay / (24 * 3600);
@@ -78,6 +102,12 @@ class DateCalcController
         return $args;
     }
 
+    /**Calculate days between two datetime params
+     * @param Request $request
+     * @param Response $response
+     * @return mixed
+     * @throws Exception
+     */
     public function calcDays(Request $request, Response $response){
         $data = $request->getParsedBody();
         $days = $this->intervalBetweenDates($data['start'],$data['end']);
@@ -94,6 +124,12 @@ class DateCalcController
         return $response->withStatus(200)->withJson($payload);
     }
 
+    /**Calculates weeks between two datetime params
+     * @param Request $request
+     * @param Response $response
+     * @return mixed
+     * @throws Exception
+     */
     public function calcWeeks(Request $request, Response $response){
         $data = $request->getParsedBody();
         $days = $this->intervalBetweenDates($data['start'],$data['end']);
@@ -108,6 +144,12 @@ class DateCalcController
         return $response->withStatus(200)->withJson($payload);
     }
 
+    /**Calculates weekdays between two datetime params
+     * @param Request $request
+     * @param Response $response
+     * @return mixed
+     * @throws Exception
+     */
     public function calcWeekDay(Request $request, Response $response){
         $data = $request->getParsedBody();
 
@@ -126,6 +168,12 @@ class DateCalcController
         return $response->withStatus(200)->withJson($payload);
     }
 
+    /**Calculates days between two datetime params with the option to
+     * change time zones of the input params
+     * @param Request $request
+     * @param Response $response
+     * @return mixed
+     */
     public function calcTimezone(Request $request, Response $response){
 
         $data = $request->getParsedBody();

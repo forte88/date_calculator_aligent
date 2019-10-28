@@ -5,15 +5,31 @@ namespace DateCalc\Middleware;
 
 use DateTime;
 
+/**
+ * Class ValidateDate
+ * @package DateCalc\Middleware
+ */
 class ValidateDate
 {
+    /**Validate datetime inputs to format 'Y-m-s H:i;s'
+     * @param $date
+     * @param string $format
+     * @return bool
+     */
     private function validateDate($date, $format = 'Y-m-d H:i:s'){
         $_date = DateTime::createFromFormat($format, $date);
         return $_date && $_date->format($format) == $date;
     }
 
+    /**Middleware function to validate and sanitize input parameters
+     * @param $request
+     * @param $response
+     * @param $next
+     * @return mixed
+     */
     public function __invoke($request, $response, $next)
     {
+
         $data = $request->getParsedBody();
 
         if (!isset($data) || empty($data)){
