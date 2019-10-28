@@ -2,6 +2,8 @@
 
 namespace  DateCalc\Controllers;
 use DateTime;
+use DateTimeZone;
+use Exception;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
@@ -12,7 +14,6 @@ class DateCalcController
         $end = new DateTime("$end");
         $interval = $start->diff($end);
         return $interval;
-
     }
 
     private function formatPayload($days){
@@ -77,7 +78,6 @@ class DateCalcController
         return $args;
     }
 
-
     public function calcDays(Request $request, Response $response){
         $data = $request->getParsedBody();
         $days = $this->intervalBetweenDates($data['start'],$data['end']);
@@ -124,6 +124,52 @@ class DateCalcController
 
 
         return $response->withStatus(200)->withJson($payload);
+    }
+
+    public function calcTimezone(Request $request, Response $response){
+
+        $data = $request->getParsedBody();
+        $start = $data['start'];
+        $end = $data['end'];
+
+        if (isset($data['timezone_start']) && !empty($data['timezone_start'])){
+            $tzoneStart = $data['timezone_start'];
+        }else{
+            $tzoneStart = 'Australia/Adelaide';
+        }
+        if (isset($data['timezone_end']) && !empty($data['timezone_end'])){
+            $tzoneEnd = $data['timezone_end'];
+        }else{
+            $tzoneEnd = 'Australia/Adelaide';
+        }
+
+        try{
+            $start = new DateTime("$start", new DateTimeZone($tzoneStart));
+        } catch (Exception $e) {
+            $e = $e->getMessage();
+            return $response->withStatus(400)->write($e . ' Please use format e.g. "Australia/Adelaide" refer to https://www.php.net/manual/en/timezones.php');
+        }
+
+        try{
+            $end = new DateTime("$end", new DateTimeZone($tzoneEnd));
+        } catch (Exception $e) {
+            $e = $e->getMessage();
+            return $response->withStatus(400)->write($e . ' Please use format e.g. "Australia/Adelaide" refer to https://www.php.net/manual/en/timezones.php');
+        }
+
+
+        $days = $start->diff($end);
+
+        if ($data['formatted'] == 1){
+            $payload = $this->formatPayload($days);
+        }else{
+            $payload = [
+                'Days' => $days->days,
+            ];
+        }
+
+        return $response->withStatus(200)->withJson($payload);
+
     }
 
 }

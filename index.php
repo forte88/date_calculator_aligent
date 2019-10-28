@@ -13,15 +13,14 @@ $app = new Slim\App(['settings' => $config]);
 $app->add(new ValidateDate());
 
 // Define app routes
-$app->get('/hello/{name}', function (Request $request,Response $response, array $args) {
-    return $response->write("Hello " . $args['name']);
-});
 
 $app->post('/days', DateCalcController::class . ':calcDays');
 
 $app->post('/weeks', DateCalcController::class . ':calcWeeks');
 
 $app->post('/weekdays', DateCalcController::class . ':calcWeekDay');
+
+$app->post('/timezone', DateCalcController::class . ':calcTimezone');
 
 // Run app
 $app->run();

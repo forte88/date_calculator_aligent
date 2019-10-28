@@ -23,6 +23,12 @@ class ValidateDate
         $data['start'] = filter_var($data['start'], FILTER_SANITIZE_STRING);
         $data['end'] = filter_var($data['end'], FILTER_SANITIZE_STRING);
         $data['formatted'] = filter_var($data['formatted'], FILTER_SANITIZE_NUMBER_INT);
+        if(isset($data['timezone_start'])){
+            $data['timezone_start'] = filter_var($data['timezone_start'], FILTER_SANITIZE_STRING);
+        }
+        if(isset($data['timezone_end'])){
+            $data['timezone_end'] = filter_var($data['timezone_start'], FILTER_SANITIZE_STRING);
+        }
 
 
         if ($this->validateDate($data['start']) == false){
