@@ -33,7 +33,7 @@ class DateCalcController
     private function formatPayload($days){
         $payload = [
             'Years' => $days->format('%y'),
-            'Days' => $days->format('%d'),
+            'Days' => $days->format('%a'),
             'Hours' => $days->format('%h'),
             'Minutes' => $days->format('%i'),
             'Seconds' => $days->format('%s'),
@@ -137,7 +137,7 @@ class DateCalcController
             $payload = $this->formatPayload($days);
         }else
         $payload = [
-            'Weeks' => $days->days/7,
+            'Weeks' => floor($days->days/7),
         ];
 
 
