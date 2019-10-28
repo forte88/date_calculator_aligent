@@ -1,6 +1,6 @@
-#Aligent Backend Development Assignment
+# Aligent Backend Development Assignment
 
-##The Challenge
+## The Challenge
 Create an API that can be used to:
 1. Find out the number of days between two datetime parameters.
 2. Find out the number of weekdays between two datetime parameters.
@@ -10,7 +10,7 @@ seconds, minutes, hours, years.
 5. Allow the specification of a timezone for comparison of input parameters from
 different timezones.
 
-##Requirments
+## Requirments
 
 For this application to operate, the following is required:
 
@@ -20,7 +20,7 @@ For this application to operate, the following is required:
 - Composer Repository Management
 - Slim Micro Framework 3.12+
 
-##Installation
+## Installation
 
 - You will need to install Composer locally on your server so that the dependencies can be installed I would recommend following - 
 https://getcomposer.org/doc/faqs/how-to-install-composer-programmatically.md
@@ -28,10 +28,10 @@ https://getcomposer.org/doc/faqs/how-to-install-composer-programmatically.md
 `cd /path/to/web;`  `git clone https://github.com/forte88/date_calculator_aligent.git`
 - Run composer update `composer update` to install dependencies
 
-##Usage
+## Usage
 The application utilises a RESTful API to handle requests, using POST methods . The application performs the basic retrieve functions as required by the outlined task.
 
-###Routes
+### Routes
 
 **/days :Post** <br />
 
@@ -106,5 +106,5 @@ Explicit:<br />
 Expected Result:<br />
 `{"Years":"0","Days":"164","Hours":"8","Minutes":"25","Seconds":"13"}`
 
-##Contact
+## Contact
 If you experience any issues with this application, please contact David Parry by emailing davidparry610@gmail.com 
