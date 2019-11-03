@@ -40,31 +40,30 @@ Calculates the difference between a start and end date with the option to format
 - Parameters 
     - start :datetime ('Y-m-d H:i:s') - POST - start datetime
     - end :datetime ('Y-m-d H:i:s') - POST - end datetime
-    - formatted:int(0 or 1) - POST - to display formated results
+    - formatted:char(y,d,h,m,s,a) - POST - to display formatted results in desired format
 - Example of calculating days between two dates <br />
 Default:<br />
-`curl -d "start=2019-05-16 19:15:02&end=2019-10-28 13:10:15&formatted=1" -X POST [yourlocalhost]/date_calculator_aligent/days
+`curl -d "start=2019-05-16 19:15:02&end=2019-10-28 13:10:15&formatted=a" -X POST [yourlocalhost]/date_calculator_aligent/days
 ` <br />
 Explicit:<br />
-`curl -d "start=2019-05-16 19:15:02&end=2019-10-28 13:10:15&formatted=1" -H "Content-Type: application/x-www-form-urlencoded" -X POST [yourlocalhost]/date_calculator_aligent/days`
+`curl -d "start=2019-05-16 19:15:02&end=2019-10-28 13:10:15&formatted=a" -H "Content-Type: application/x-www-form-urlencoded" -X POST [yourlocalhost]/date_calculator_aligent/days`
 <br />
 Expected Result:<br />
-`{"Years":"0","Days":"164","Hours":"17","Minutes":"55","Seconds":"13"}`
+`{"Years":"0","Days":"164","Hours":"16","Minutes":"55","Seconds":"13"}`
 
 **/weeks :Post** <br />
 
-Calculates the difference between a start and end date with the option to format the results in years, days, hours, minutes & seconds.
+Calculates the difference between a start and end date in weeks ONLY.
 
 - Parameters 
     - start :datetime ('Y-m-d H:i:s') - POST - start datetime
     - end :datetime ('Y-m-d H:i:s') - POST - end datetime
-    - formatted:int(0 or 1) - POST - to display formated results
 - Example of calculating days between two dates <br />
 Default:<br />
-`curl -d "start=2019-05-16 19:15:02&end=2019-10-28 13:10:15&formatted=0" -X POST [yourlocalhost]/date_calculator_aligent/weeks
+`curl -d "start=2019-05-16 19:15:02&end=2019-10-28 13:10:15" -X POST [yourlocalhost]/date_calculator_aligent/weeks
 ` <br />
 Explicit:<br />
-`curl -d "start=2019-05-16 19:15:02&end=2019-10-28 13:10:15&formatted=0" -H "Content-Type: application/x-www-form-urlencoded" -X POST [yourlocalhost]/date_calculator_aligent/weeks`
+`curl -d "start=2019-05-16 19:15:02&end=2019-10-28 13:10:15" -H "Content-Type: application/x-www-form-urlencoded" -X POST [yourlocalhost]/date_calculator_aligent/weeks`
 <br />
 Expected Result:<br />
 `{"Weeks":23}`
@@ -76,13 +75,13 @@ Calculates the difference between a start and end date with the option to format
 - Parameters 
     - start :datetime ('Y-m-d H:i:s') - POST - start datetime
     - end :datetime ('Y-m-d H:i:s') - POST - end datetime
-    - formatted:int(0 or 1) - POST - to display formated results
+    - formatted:char(y,d,h,m,s,a) - POST - to display formatted results in desired format
 - Example of calculating days between two dates <br />
 Default:<br />
-`curl -d "start=2019-05-16 19:15:02&end=2019-10-28 13:10:15&formatted=1" -X POST [yourlocalhost]/date_calculator_aligent/weekdays
+`curl -d "start=2019-05-16 19:15:02&end=2019-10-28 13:10:15&formatted=a" -X POST [yourlocalhost]/date_calculator_aligent/weekdays
 ` <br />
 Explicit:<br />
-`curl -d "start=2019-05-16 19:15:02&end=2019-10-28 13:10:15&formatted=1" -H "Content-Type: application/x-www-form-urlencoded" -X POST [yourlocalhost]/date_calculator_aligent/weekdays`
+`curl -d "start=2019-05-16 19:15:02&end=2019-10-28 13:10:15&formatted=a" -H "Content-Type: application/x-www-form-urlencoded" -X POST [yourlocalhost]/date_calculator_aligent/weekdays`
 <br />
 Expected Result:<br />
 `{"Years":0,"Days":116,"Hours":17,"Minutes":55,"Seconds":13}`
@@ -96,15 +95,15 @@ Calculates the difference between a start and end date with the option to format
     - end :datetime ('Y-m-d H:i:s') - POST - end datetime
     - timezone_start :DateTimeZone ('Australia/Adelaide') - POST - start timezone
     - timezone_end :DateTimeZone ('Australia/Adelaide') - POST - end timezone
-    - formatted:int(0 or 1) - POST - to display formated results
+    - formatted:char(y,d,h,m,s,a) - POST - to display formatted results in desired format
 - Example of calculating days between two dates <br />
 Default:<br />
-`curl -d "start=2019-05-16 19:15:02&end=2019-10-28 13:10:15&timezone_start=Europe/London&timezone_end=Australia/Adelaide&formatted=1" -X POST http://fortedev:8080/date_calculator_aligent/timezone` <br />
+`curl -d "start=2019-05-16 19:15:02&end=2019-10-28 13:10:15&timezone_start=Europe/London&timezone_end=Australia/Adelaide&formatted=a" -X POST http://fortedev:8080/date_calculator_aligent/timezone` <br />
 Explicit:<br />
-`curl -d "start=2019-05-16 19:15:02&end=2019-10-28 13:10:15&timezone_start=Europe/London&timezone_end=Australia/Adelaide&formatted=1" -H "Content-Type: application/x-www-form-urlencoded" -X POST http://fortedev:8080/date_calculator_aligent/timezone`
+`curl -d "start=2019-05-16 19:15:02&end=2019-10-28 13:10:15&timezone_start=Europe/London&timezone_end=Australia/Adelaide&formatted=a" -H "Content-Type: application/x-www-form-urlencoded" -X POST http://fortedev:8080/date_calculator_aligent/timezone`
 <br />
 Expected Result:<br />
-`{"Years":"0","Days":"164","Hours":"8","Minutes":"25","Seconds":"13"}`
+`{"Years":"0","Days":"164","Hours":"16","Minutes":"55","Seconds":"13"}`
 
 ## Contact
 If you experience any issues with this application, please contact David Parry by emailing davidparry610@gmail.com 
