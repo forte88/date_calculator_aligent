@@ -40,15 +40,8 @@ class DateCalcController
      */
     public function calcWeeks(Request $request, Response $response){
         $data = $request->getParsedBody();
-        $days = $this->intervalBetweenDates($data['start'],$data['end']);
-        if ($data['formatted'] == 1){
-            $payload = $this->formatPayload($days);
-        }else
-        $payload = [
-            'Weeks' => floor($days->days/7),
-        ];
-
-
+        $service = new Service();
+        $payload = $service->calcWeeksService($data);
         return $response->withStatus(200)->withJson($payload);
     }
 

@@ -21,6 +21,12 @@ class CalculateDaysService
         return $interval;
     }
 
+    /**Calculates weekdays between two times in seconds
+     * @param $starttime
+     * @param $endtime
+     * @return false|float|int
+     * @throws Exception
+     */
     private function weekDayCalc($starttime, $endtime){
         $days = [];
         $dayCount = 0;
@@ -101,5 +107,15 @@ class CalculateDaysService
         $days = $this->intervalBetweenDates($data['start'],$data['end']);
         $payload = $this->dateConverter($days, $data['formatted']);
         return $payload;
+    }
+
+    /**Calculates weeks between two date parameters
+     * @param $data
+     * @return array
+     * @throws Exception
+     */
+    public  function calcWeeksService($data){
+        $days = $this->intervalBetweenDates($data['start'],$data['end']);
+        return $payload = ['weeks' => $days/7];
     }
 }

@@ -21,6 +21,30 @@ class ValidateDate
         return $_date && $_date->format($format) == $date;
     }
 
+    /**Sanitizes all input parameters
+     * @param $data
+     * @return mixed
+     */
+    private function sanatizeInputs($data){
+        if (isset($data['start']) && !empty($data['start'])){
+            $data['start'] = filter_var($data['start'], FILTER_SANITIZE_STRING);
+        }
+        if (isset($data['end']) && !empty($data['end'])){
+            $data['end'] = filter_var($data['end'], FILTER_SANITIZE_NUMBER_INT);
+        }
+        if (isset($data['formatted']) && !empty($data['formatted'])){
+            $data['formatted'] = filter_var($data['formatted'], FILTER_SANITIZE_NUMBER_INT);
+        }
+        if(isset($data['timezone_start']) && !empty($data['formatted'])){
+            $data['timezone_start'] = filter_var($data['timezone_start'], FILTER_SANITIZE_STRING);
+        }
+        if(isset($data['timezone_end']) && !empty($data['formatted'])){
+            $data['timezone_end'] = filter_var($data['timezone_start'], FILTER_SANITIZE_STRING);
+        }
+        return $data;
+    }
+
+
     /**Middleware function to validate and sanitize input parameters
      * @param $request
      * @param $response
@@ -36,16 +60,7 @@ class ValidateDate
             return $response->withStatus(400)->write("Empty request");
         }
 
-        $data['start'] = filter_var($data['start'], FILTER_SANITIZE_STRING);
-        $data['end'] = filter_var($data['end'], FILTER_SANITIZE_STRING);
-        $data['formatted'] = filter_var($data['formatted'], FILTER_SANITIZE_NUMBER_INT);
-        if(isset($data['timezone_start'])){
-            $data['timezone_start'] = filter_var($data['timezone_start'], FILTER_SANITIZE_STRING);
-        }
-        if(isset($data['timezone_end'])){
-            $data['timezone_end'] = filter_var($data['timezone_start'], FILTER_SANITIZE_STRING);
-        }
-
+       $data = $this->sanatizeInputs($data);
 
         if ($this->validateDate($data['start']) == false){
             return $response->withStatus(400)->write("please use correct date format [Y-m-d H:i:s] for start date");
