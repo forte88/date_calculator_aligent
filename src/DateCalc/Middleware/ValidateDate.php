@@ -30,10 +30,10 @@ class ValidateDate
             $data['start'] = filter_var($data['start'], FILTER_SANITIZE_STRING);
         }
         if (isset($data['end']) && !empty($data['end'])){
-            $data['end'] = filter_var($data['end'], FILTER_SANITIZE_NUMBER_INT);
+            $data['end'] = filter_var($data['end'], FILTER_SANITIZE_STRING);
         }
         if (isset($data['formatted']) && !empty($data['formatted'])){
-            $data['formatted'] = filter_var($data['formatted'], FILTER_SANITIZE_NUMBER_INT);
+            $data['formatted'] = filter_var($data['formatted'], FILTER_SANITIZE_STRING);
         }
         if(isset($data['timezone_start']) && !empty($data['formatted'])){
             $data['timezone_start'] = filter_var($data['timezone_start'], FILTER_SANITIZE_STRING);

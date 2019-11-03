@@ -45,8 +45,16 @@ class CalculateDaysService
             }
         }
 
-        $weekDay = ($dayCount - $weekDayCount) * (24*60*60);
-        $weekDay =  (strtotime($endtime)-strtotime($starttime))-$weekDay;
+        /*
+         * Find the difference between days and weekdays & convert the difference to seconds
+         */
+        $weekDayDiff = ($dayCount - $weekDayCount) * (24*60*60);
+        /*
+         * Will find the difference between end and start time in seconds
+         * Will subtract that difference by the weekDayDiff
+         * This will return an accurate timestamp to the second.
+         */
+        $weekDay =  (strtotime($endtime)-strtotime($starttime))-$weekDayDiff;
 
         return $weekDay;
     }
@@ -58,7 +66,7 @@ class CalculateDaysService
      * @return array
      */
     private function dateConverter($timeInSeconds, $format){
-        $payload = $timeInSeconds;
+        $format = strtolower($format);
         if ($format == 'd'){
             $payload = ['days' => floor($timeInSeconds / (24 *3600))];
         }else if($format == 'y'){
@@ -116,6 +124,19 @@ class CalculateDaysService
      */
     public  function calcWeeksService($data){
         $days = $this->intervalBetweenDates($data['start'],$data['end']);
-        return $payload = ['weeks' => $days/7];
+        $weeks = floor(($days / (24 *3600))/7);
+        return $payload = ['weeks' => $weeks];
     }
+
+    /**
+     * @param $data
+     * @return array
+     * @throws Exception
+     */
+    public function calcWeekDaysService($data){
+        $weekDay = $this->weekDayCalc($data['start'],$data['end']);
+        $payload = $this->dateConverter($weekDay, $data['formatted']);
+        return $payload;
+    }
+
 }

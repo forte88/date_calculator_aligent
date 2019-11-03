@@ -23,6 +23,9 @@ class DateCalcController
      */
     public function calcDays(Request $request, Response $response){
         $data = $request->getParsedBody();
+        if(empty($data['formatted'])){
+            return $response->withStatus(400)->write('please enter "y, d, h, m ,s or a" in formatted');
+        }
         $service = new Service();
         $payload = $service->calcDaysService($data);
         if ($payload == 0){
@@ -53,19 +56,14 @@ class DateCalcController
      */
     public function calcWeekDay(Request $request, Response $response){
         $data = $request->getParsedBody();
-
-        $weekDay = $this->weekDayCalc($data['start'],$data['end']);
-
-
-        if($data['formatted'] == 1){
-            $payload =  $this->convertDayToSec($weekDay);
-        }else{
-            $payload = [
-                'Days' => floor($weekDay/(24 * 3600)),
-            ];
+        if(empty($data['formatted'])){
+            return $response->withStatus(400)->write('please enter "y, d, h, m ,s or a" in formatted');
         }
-
-
+        $service = new Service();
+        $payload = $service->calcWeekDaysService($data);
+        if ($payload == 0){
+            return $response->withStatus(400)->write('please enter "y, d, h, m ,s or a" in formatted');
+        }
         return $response->withStatus(200)->withJson($payload);
     }
 
@@ -118,7 +116,5 @@ class DateCalcController
         }
 
         return $response->withStatus(200)->withJson($payload);
-
     }
-
 }
