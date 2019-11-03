@@ -15,7 +15,7 @@ class CalculateDaysService
      * @return int as seconds
      * @throws Exception
      */
-    private function intervalBetweenDates($start, $end){
+    private static function intervalBetweenDates($start, $end){
         $start = new DateTime("$start");
         $end = new DateTime("$end");
         $interval = $end->getTimestamp() - $start->getTimestamp();
@@ -28,7 +28,7 @@ class CalculateDaysService
      * @return false|float|int
      * @throws Exception
      */
-    private function weekDayCalc($starttime, $endtime){
+    private static function weekDayCalc($starttime, $endtime){
         $days = [];
         $dayCount = 0;
         $weekDayCount = 0;
@@ -66,7 +66,7 @@ class CalculateDaysService
      * @param $format
      * @return array
      */
-    private function dateConverter($timeInSeconds, $format){
+    private static function dateConverter($timeInSeconds, $format){
         $format = strtolower($format);
         if ($format == 'd'){
             $payload = ['days' => floor($timeInSeconds / (24 *3600))];
@@ -111,9 +111,9 @@ class CalculateDaysService
      * @return array
      * @throws Exception
      */
-    public function calcDaysService($data){
-        $days = $this->intervalBetweenDates($data['start'],$data['end']);
-        $payload = $this->dateConverter($days, $data['formatted']);
+    public static function calcDaysService($data){
+        $days = self::intervalBetweenDates($data['start'],$data['end']);
+        $payload = self::dateConverter($days, $data['formatted']);
         return $payload;
     }
 
@@ -122,8 +122,8 @@ class CalculateDaysService
      * @return array
      * @throws Exception
      */
-    public  function calcWeeksService($data){
-        $days = $this->intervalBetweenDates($data['start'],$data['end']);
+    public static function calcWeeksService($data){
+        $days = self::intervalBetweenDates($data['start'],$data['end']);
         $weeks = floor(($days / (24 *3600))/7);
         return $payload = ['weeks' => $weeks];
     }
@@ -133,14 +133,13 @@ class CalculateDaysService
      * @return array
      * @throws Exception
      */
-    public function calcWeekDaysService($data){
-        $weekDay = $this->weekDayCalc($data['start'],$data['end']);
-        $payload = $this->dateConverter($weekDay, $data['formatted']);
+    public static function calcWeekDaysService($data){
+        $weekDay = self::weekDayCalc($data['start'],$data['end']);
+        $payload = self::dateConverter($weekDay, $data['formatted']);
         return $payload;
     }
 
-    public function calcTimezoneService($data){
-
+    public static function calcTimezoneService($data){
         $start = $data['start'];
         $end = $data['end'];
 
@@ -170,7 +169,7 @@ class CalculateDaysService
         }
 
         $days = $end->getTimestamp() - $start->getTimestamp();
-        $payload = $this->dateConverter($days, $data['formatted']);
+        $payload = self::dateConverter($days, $data['formatted']);
         return $payload;
     }
 }

@@ -1,9 +1,7 @@
 <?php
 
 namespace  DateCalc\Controllers;
-use DateCalc\Services\CalculateDaysService as Service;
-use DateTime;
-use DateTimeZone;
+use DateCalc\Services\CalculateDaysService;
 use Exception;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -26,13 +24,11 @@ class DateCalcController
         if(empty($data['formatted'])){
             return $response->withStatus(400)->write('please enter "y, d, h, m ,s or a" in formatted');
         }
-        $service = new Service();
-        $payload = $service->calcDaysService($data);
+        $payload = CalculateDaysService::calcDaysService($data);
         if ($payload == 0){
             return $response->withStatus(400)->write('please enter "y, d, h, m ,s or a" in formatted');
         }
         return $response->withStatus(200)->withJson($payload);
-
     }
 
     /**Calculates weeks between two datetime params
@@ -43,8 +39,7 @@ class DateCalcController
      */
     public function calcWeeks(Request $request, Response $response){
         $data = $request->getParsedBody();
-        $service = new Service();
-        $payload = $service->calcWeeksService($data);
+        $payload = CalculateDaysService::calcWeeksService($data);
         return $response->withStatus(200)->withJson($payload);
     }
 
@@ -59,8 +54,7 @@ class DateCalcController
         if(empty($data['formatted'])){
             return $response->withStatus(400)->write('please enter "y, d, h, m ,s or a" in formatted');
         }
-        $service = new Service();
-        $payload = $service->calcWeekDaysService($data);
+        $payload = CalculateDaysService::calcWeekDaysService($data);
         if ($payload == 0){
             return $response->withStatus(400)->write('please enter "y, d, h, m ,s or a" in formatted');
         }
@@ -74,13 +68,11 @@ class DateCalcController
      * @return mixed
      */
     public function calcTimezone(Request $request, Response $response){
-
         $data = $request->getParsedBody();
         if(empty($data['formatted'])){
             return $response->withStatus(400)->write('please enter "y, d, h, m ,s or a" in formatted');
         }
-        $service = new Service();
-        $payload = $service->calcTimezoneService($data);
+        $payload = CalculateDaysService::calcTimezoneService($data);
         if ($payload == 0){
             return $response->withStatus(400)->write('please enter "y, d, h, m ,s or a" in formatted');
         }
