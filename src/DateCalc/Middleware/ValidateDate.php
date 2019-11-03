@@ -51,8 +51,6 @@ class ValidateDate
             return $response->withStatus(400)->write("please use correct date format [Y-m-d H:i:s] for start date");
         }else if($this->validateDate($data['end']) ==false){
             return $response->withStatus(400)->write("please use correct date format [Y-m-d H:i:s] for end date");
-        }else if(!($data['formatted'] == 0 Xor $data['formatted'] == 1) || $data['formatted'] == null){
-            return $response->withStatus(400)->write("please enter 0 for difference in days or 1 for for formatted results");
         }
 
         $response = $next($request, $response);

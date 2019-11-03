@@ -1,6 +1,7 @@
 <?php
 
 namespace  DateCalc\Controllers;
+use DateCalc\Services\CalculateDaysService as Service;
 use DateTime;
 use DateTimeZone;
 use Exception;
@@ -13,94 +14,6 @@ use Psr\Http\Message\ServerRequestInterface as Request;
  */
 class DateCalcController
 {
-    /**Creates date objects and  returns interval between two date times
-     * @param $start
-     * @param $end
-     * @return bool|\DateInterval
-     * @throws Exception
-     */
-    private function intervalBetweenDates($start, $end){
-        $start = new DateTime("$start");
-        $end = new DateTime("$end");
-        $interval = $start->diff($end);
-        return $interval;
-    }
-
-    /**Formats date time object into an array of years days etc
-     * @param $days
-     * @return array
-     */
-    private function formatPayload($days){
-        $payload = [
-            'Years' => $days->format('%y'),
-            'Days' => $days->format('%a'),
-            'Hours' => $days->format('%h'),
-            'Minutes' => $days->format('%i'),
-            'Seconds' => $days->format('%s'),
-        ];
-
-        return $payload;
-    }
-
-    /**Calculates the weekdays between two datetime objects in unix time
-     * @param $starttime
-     * @param $endtime
-     * @return false|float|int
-     * @throws Exception
-     */
-    private function weekDayCalc($starttime, $endtime){
-        $days = [];
-        $dayCount = 0;
-        $weekDayCount = 0;
-
-        $start = new DateTime("$starttime");
-        $end = new DateTime("$endtime");
-
-        for ($i = $start; $i <= $end; $i->modify('+1 day')){
-            $days[] = $i->format('N');
-            $dayCount++;
-        }
-        foreach ($days as $day){
-            if (!($day == 6 || $day == 7)){
-                $weekDayCount++;
-            }
-        }
-
-        $weekDay = ($dayCount - $weekDayCount) * (24*60*60);
-        $weekDay =  (strtotime($endtime)-strtotime($starttime))-$weekDay;
-
-        return $weekDay;
-    }
-
-    /**Converts unix time into years, days, hours etc
-     * @param $weekDay
-     * @return array
-     */
-    private function convertDayToSec($weekDay){
-        $year = 0;
-        $day = $weekDay / (24 * 3600);
-        if ($day > 365){
-            $year = $day / 365;
-            $day = $day - (365*floor($year));
-
-        }
-        $weekDay = $weekDay % (24 * 3600);
-        $hour = $weekDay / 3600;
-        $weekDay %= 3600;
-        $minute = $weekDay / 60;
-        $weekDay %= 60;
-        $second = $weekDay;
-
-        $args = [
-            'Years' => floor($year),
-            'Days' => floor($day),
-            'Hours' => floor($hour),
-            'Minutes' => floor($minute),
-            'Seconds' => floor($second)
-        ];
-
-        return $args;
-    }
 
     /**Calculate days between two datetime params
      * @param Request $request
@@ -110,18 +23,13 @@ class DateCalcController
      */
     public function calcDays(Request $request, Response $response){
         $data = $request->getParsedBody();
-        $days = $this->intervalBetweenDates($data['start'],$data['end']);
-        if ($data['formatted'] == 1){
-            $payload = $this->formatPayload($days);
-        }else{
-            $payload = [
-                'Days' => $days->days,
-            ];
+        $service = new Service();
+        $payload = $service->calcDaysService($data);
+        if ($payload == 0){
+            return $response->withStatus(400)->write('please enter "y, d, h, m ,s or a" in formatted');
         }
-
-
-
         return $response->withStatus(200)->withJson($payload);
+
     }
 
     /**Calculates weeks between two datetime params
