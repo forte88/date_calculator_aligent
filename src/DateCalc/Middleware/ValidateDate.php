@@ -25,7 +25,7 @@ class ValidateDate
      * @param $data
      * @return mixed
      */
-    private function sanatizeInputs($data){
+    private static function sanitizeInputs($data){
         if (isset($data['start']) && !empty($data['start'])){
             $data['start'] = filter_var($data['start'], FILTER_SANITIZE_STRING);
         }
@@ -60,7 +60,7 @@ class ValidateDate
             return $response->withStatus(400)->write("Empty request");
         }
 
-       $data = $this->sanatizeInputs($data);
+       $data = self::sanitizeInputs($data);
 
         if ($this->validateDate($data['start']) == false){
             return $response->withStatus(400)->write("please use correct date format [Y-m-d H:i:s] for start date");

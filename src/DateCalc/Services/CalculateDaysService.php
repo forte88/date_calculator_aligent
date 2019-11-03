@@ -9,13 +9,13 @@ class CalculateDaysService
 {
 
     /**Converts start and end stings into datetime objects
-     *Calculates the difference in unixtime seconds
+     *Calculates the difference in seconds
      * @param $start
      * @param $end
      * @return int as seconds
      * @throws Exception
      */
-    private static function intervalBetweenDates($start, $end){
+    private static function getIntervalBetweenDates($start, $end){
         $start = new DateTime("$start");
         $end = new DateTime("$end");
         $interval = $end->getTimestamp() - $start->getTimestamp();
@@ -28,7 +28,7 @@ class CalculateDaysService
      * @return false|float|int
      * @throws Exception
      */
-    private static function weekDayCalc($starttime, $endtime){
+    private static function getWeekDays($starttime, $endtime){
         $days = [];
         $dayCount = 0;
         $weekDayCount = 0;
@@ -66,7 +66,7 @@ class CalculateDaysService
      * @param $format
      * @return array
      */
-    private static function dateConverter($timeInSeconds, $format){
+    private static function convertDate($timeInSeconds, $format){
         $format = strtolower($format);
         if ($format == 'd'){
             $payload = ['days' => floor($timeInSeconds / (24 *3600))];
@@ -112,8 +112,8 @@ class CalculateDaysService
      * @throws Exception
      */
     public static function calcDaysService($data){
-        $days = self::intervalBetweenDates($data['start'],$data['end']);
-        $payload = self::dateConverter($days, $data['formatted']);
+        $days = self::getIntervalBetweenDates($data['start'],$data['end']);
+        $payload = self::convertDate($days, $data['formatted']);
         return $payload;
     }
 
@@ -123,7 +123,7 @@ class CalculateDaysService
      * @throws Exception
      */
     public static function calcWeeksService($data){
-        $days = self::intervalBetweenDates($data['start'],$data['end']);
+        $days = self::getIntervalBetweenDates($data['start'],$data['end']);
         $weeks = floor(($days / (24 *3600))/7);
         return $payload = ['weeks' => $weeks];
     }
@@ -134,8 +134,8 @@ class CalculateDaysService
      * @throws Exception
      */
     public static function calcWeekDaysService($data){
-        $weekDay = self::weekDayCalc($data['start'],$data['end']);
-        $payload = self::dateConverter($weekDay, $data['formatted']);
+        $weekDay = self::getWeekDays($data['start'],$data['end']);
+        $payload = self::convertDate($weekDay, $data['formatted']);
         return $payload;
     }
 
@@ -169,7 +169,7 @@ class CalculateDaysService
         }
 
         $days = $end->getTimestamp() - $start->getTimestamp();
-        $payload = self::dateConverter($days, $data['formatted']);
+        $payload = self::convertDate($days, $data['formatted']);
         return $payload;
     }
 }
