@@ -2,6 +2,7 @@
 namespace DateCalc\Services;
 
 use DateTime;
+use DateTimeZone;
 use Exception;
 
 class CalculateDaysService
@@ -105,7 +106,6 @@ class CalculateDaysService
         return $payload;
     }
 
-
     /**
      * @param $data
      * @return array
@@ -139,4 +139,38 @@ class CalculateDaysService
         return $payload;
     }
 
+    public function calcTimezoneService($data){
+
+        $start = $data['start'];
+        $end = $data['end'];
+
+        if (isset($data['timezone_start']) && !empty($data['timezone_start'])){
+            $tzoneStart = $data['timezone_start'];
+        }else{
+            $tzoneStart = 'Australia/Adelaide';
+        }
+        if (isset($data['timezone_end']) && !empty($data['timezone_end'])){
+            $tzoneEnd = $data['timezone_end'];
+        }else{
+            $tzoneEnd = 'Australia/Adelaide';
+        }
+
+        try{
+            $start = new DateTime("$start", new DateTimeZone($tzoneStart));
+        } catch (Exception $e) {
+            $e = $e->getMessage();
+            return $e;
+        }
+
+        try{
+            $end = new DateTime("$end", new DateTimeZone($tzoneEnd));
+        } catch (Exception $e) {
+            $e = $e->getMessage();
+            return $e;
+        }
+
+        $days = $end->getTimestamp() - $start->getTimestamp();
+        $payload = $this->dateConverter($days, $data['formatted']);
+        return $payload;
+    }
 }
